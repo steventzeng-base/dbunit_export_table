@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+ext {
+    driver = 'com.ibm.db2.jcc.DB2Driver'
+    url = 'jdbc:db2://10.77.10.29:50000/db2npps3'
+    userid = 'nppuser3'
+    password = 'nppuser3'
+    exportFile = 'export.xml'
+    exortDataSet = {
+        table name: 'NPP_ADCB_CHARGE'
+        query name: 'NPP_ADCB_REFUND', sql: 'select REQUEST_ID, CLIENT_REFUND_ID, REFUND_AMOUNT, REFUND_REASON, TRANSACTION_TS, TXID, REASON_CODE, MESSAGE, CREATE_TS, CURRENCY, REFUND_ID from NPP_ADCB_REFUND'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile fileTree('libs')
+    compile 'org.dbunit:dbunit:2.5.1'
+    compile 'org.slf4j:slf4j-api:1.7.13', 'org.slf4j:slf4j-nop:1.7.13'
+}
+
+task exportTable(dependsOn: build) << {
+    ant.taskdef(name: 'dbunit', classname:'org.dbunit.ant.DbUnitTask',classpath: configurations.compile.asPath)
+    ant.dbunit (driver: driver, url: url, userid: userid, password: password){
+       export ([dest:"$buildDir/$exportFile", format:'xml'], exortDataSet)
+    }
+}
