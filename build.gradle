@@ -7,6 +7,8 @@ ext {
     password = 'nppuser3'
     exportFile = 'export.xml'
     exortDataSet = {
+        // you can use ``table name`` for query all enties for given table name.
+        //  or use ``query name`` for get dataset form  given sql  query result. 
         table name: 'NPP_ADCB_CHARGE'
         query name: 'NPP_ADCB_REFUND', sql: 'select REQUEST_ID, CLIENT_REFUND_ID, REFUND_AMOUNT, REFUND_REASON, TRANSACTION_TS, TXID, REASON_CODE, MESSAGE, CREATE_TS, CURRENCY, REFUND_ID from NPP_ADCB_REFUND'
     }
